@@ -1,6 +1,7 @@
 // Copyright 2023 QMK
 // SPDX-License-Identifier: GPL-2.0-or-later
 #include "quantum.h"
+#include <stdio.h>
 
 #ifdef SWAP_HANDS_ENABLE
 
@@ -66,7 +67,9 @@ static void render_logo(void) {
 
 void print_status_narrow(void) {
     oled_write_P(PSTR("\n\n"), false);
-    oled_write_ln(get_u8_str(get_highest_layer(layer_state), ' '), false);
+    char layer_buf[3];
+    snprintf(layer_buf, sizeof(layer_buf), "%d", get_highest_layer(layer_state));
+    oled_write_ln(layer_buf, false);
     switch (get_highest_layer(layer_state)) {
         case 0:
             oled_write_ln_P(PSTR("Qwrt"), false);
@@ -88,10 +91,10 @@ void print_status_narrow(void) {
             oled_write_P(PSTR("Mvt\n"), false);
             break;
         case 2:
-            oled_write_P(PSTR("Spcl"), false);
+            oled_write_P(PSTR("Spcl\n"), false);
             break;
         case 3:
-            oled_write_P(PSTR("!!!"), false);
+            oled_write_P(PSTR("!!!\n"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);
@@ -99,6 +102,13 @@ void print_status_narrow(void) {
     oled_write_P(PSTR("\n\n"), false);
     led_t led_usb_state = host_keyboard_led_state();
     oled_write_ln_P(PSTR("CPSLK"), led_usb_state.caps_lock);
+#ifdef WPM_ENABLE
+    oled_write_P(PSTR("\n"), false);
+    char wpm_buf[6];
+    snprintf(wpm_buf, sizeof(wpm_buf), "%d", get_current_wpm());
+    oled_write(wpm_buf, false);
+    oled_write_P(PSTR("WPM"), false);
+#endif
 }
 
 bool oled_task_kb(void) {
