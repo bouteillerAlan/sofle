@@ -32,7 +32,13 @@ qmk compile -kb sofle/rev1 -km default
 ```
 qmk flash -kb sofle/rev1 -km default -bl dfu
 ```
-
+or
+```
+cd ~/qmk_firmware
+dfu-programmer atmega32u4 erase --force
+dfu-programmer atmega32u4 flash sofle_rev1_default.hex
+dfu-programmer atmega32u4 reset
+```
 
 
 
