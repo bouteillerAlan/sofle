@@ -1,33 +1,38 @@
 # QMK Setup with Vial for Sofle rev1
 
 ## 1. Clone vial-qmk
+```
 git clone https://github.com/vial-kb/vial-qmk.git ~/Documents/vial-qmk
 cd ~/Documents/vial-qmk
+```
 
 ## 2. Initialize submodules (important, otherwise "lufa/makefile" error)
+```
 qmk git-submodule
 # or: git submodule update --init --recursive
+```
 
 ## 3. Configure QMK CLI to use this repo
+```
 qmk config user.qmk_home="$HOME/Documents/vial-qmk"
+```
 
 ## 4. Verify config
+```
 qmk config
 # should show: user.qmk_home=/home/xxx/Documents/vial-qmk
+```
 
 ## 5. Compile
+```
 qmk compile -kb sofle/rev1 -km default
+```
 
 ## 6. Flash
+```
 qmk flash -kb sofle/rev1 -km default -bl dfu
-# put the keyboard in bootloader mode first (reset button or key combo)
+```
 
-## To switch back to official QMK (if ever needed)
-qmk config user.qmk_home="$HOME/qmk_firmware"
-
-## Notes
-- The "atmel-dfu" bootloader doesn't work here, use "dfu" instead
-- Personal repo with old keymap: https://github.com/bouteillerAlan/sofle
 
 
 
