@@ -40,7 +40,41 @@ dfu-programmer atmega32u4 flash sofle_rev1_default.hex
 dfu-programmer atmega32u4 reset
 ```
 
+---
 
+```markdown
+# Vial on Linux — WebHID Access Fix
+
+## Problem
+`NotAllowedError: Failed to open the device` when connecting on vial.rocks.
+
+## Cause
+Missing udev permissions for HID access on Linux.
+
+## Fix
+
+- [ ] Find VID/PID with `lsusb` (e.g. `fc32:0287`)
+- [ ] Create rule file:
+  ```
+  sudo nano /etc/udev/rules.d/59-vial.rules
+  ```
+- [ ] Add rules (replace VID/PID):
+  ```
+  SUBSYSTEM=="usb", ATTRS{idVendor}=="fc32", ATTRS{idProduct}=="0287", MODE="0666", GROUP="users", TAG+="uaccess"
+  KERNEL=="hidraw*", ATTRS{idVendor}=="fc32", ATTRS{idProduct}=="0287", MODE="0666", GROUP="users", TAG+="uaccess"
+  ```
+- [ ] Reload udev:
+  ```
+  sudo udevadm control --reload-rules
+  sudo udevadm trigger
+  ```
+- [ ] Unplug/replug keyboard
+- [ ] Verify: `ls -l /dev/hidraw*` → should show `666` perms
+- [ ] Retry connection on vial.rocks
+
+## Note
+File must be named `59-*.rules` (not `99-*`) due to systemd udev ordering change.
+```
 
 ---
 
