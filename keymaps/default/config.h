@@ -3,6 +3,8 @@
 
 #pragma once
 
+// Enable split communication transactions
+#define SPLIT_TRANSACTION_IDS_USER RPC_ID_TYPED_CHAR
 
 #define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_STATIC_LIGHT
 #define RGBLIGHT_LIMIT_VAL 128
